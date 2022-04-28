@@ -29,13 +29,14 @@ class Problem:
             return True
         return False
 
-    def print_node_state(self, node):
-        for i in range(node.get_state()):
+    def print_state(self, node):
+        for i in range(len(node.get_state())):
             if i % self.puzzle_cols == 0:
                 print()
             else:
                 pass
-            print(node.get_state()[i] + " ")
+            print(node.get_state()[i], end = " ")
+        print()
 
     # returns the index of the empty space (0) in the node's state/ puzzle
     def get_empty_space_loc(self, node):
@@ -58,14 +59,16 @@ class Problem:
             new_state[zero_index - 1] = temp 
 
             child = Node(new_state)
+            child.set_direction("left")
             child.set_parent(node)
+            # child.set_cost(node.get_cost() + child.get_cost())
             node.add_child(child)
         else:
             pass
 
     def move_right(self, node, zero_index):
         if zero_index % self.puzzle_cols  < self.puzzle_cols - 1:
-
+            
             new_state = node.get_state()
 
             # swap 0 and the number to it's right
@@ -74,6 +77,7 @@ class Problem:
             new_state[zero_index + 1] = temp 
 
             child = Node(new_state)
+            child.set_direction("right")
             child.set_parent(node)
             node.add_child(child)
         else:
@@ -90,6 +94,7 @@ class Problem:
             new_state[zero_index - self.puzzle_cols] = temp 
 
             child = Node(new_state)
+            child.set_direction("up")
             child.set_parent(node)
             node.add_child(child)
         else:
@@ -109,6 +114,7 @@ class Problem:
             new_state[zero_index + self.puzzle_cols] = temp 
 
             child = Node(new_state)
+            child.set_direction("down")
             child.set_parent(node)
             node.add_child(child)
         else:
@@ -122,3 +128,20 @@ class Problem:
         self.move_up(node, zero_index)
         self.move_down(node, zero_index)
         
+        
+    
+    def get_solution_path(self, leaf_node):
+        path = []
+        path.append(leaf_node)
+        curr_node = leaf_node
+
+        while (curr_node.get_parent() != None):
+            curr_node = curr_node.get_parent()
+            path.append(curr_node)
+        
+        return path
+
+    def print_solution_path(self, solution):
+        for node in solution:
+            self.print_state(node)
+            print()
