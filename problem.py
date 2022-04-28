@@ -142,6 +142,9 @@ class Problem:
         return path
 
     def print_solution_path(self, solution):
-        for node in solution:
+        for node in solution[::-1]:
+            dir = node.get_direction()
+            if dir != None:
+                print("Move: " + dir + "...")
             self.print_state(node)
             print()
