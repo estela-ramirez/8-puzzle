@@ -5,7 +5,7 @@ empty space is represented with 0
 """
 
 class Node:
-    def __init__(self, state = [1, 2, 3, 4, 5, 6, 7, 8, 0]):
+    def __init__(self, state = [1, 2, 3, 4, 5, 6, 7, 0, 8]):
         self.state = state  # state of puzzle 
         self.parent = None
         self.children = []

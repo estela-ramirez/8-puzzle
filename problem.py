@@ -1,11 +1,11 @@
 from node import Node
 
 class Problem:
-    def __init__(self, init_state = [1, 2, 3, 4, 8, 0, 7, 6, 5], goal_state = [1, 2, 3, 4, 5, 6, 7, 8, 0]):
+    def __init__(self, puzzle_cols = 3, init_state = [1, 2, 3, 4, 5, 6, 7, 0, 8], goal_state = [1, 2, 3, 4, 5, 6, 7, 8, 0]):
         self.init_state = init_state
         self.goal_state = goal_state
         # operators for the blank space (0), if there is a number in that direction
-        self.puzzle_cols = 3       # num of rows, cols for puzzle
+        self.puzzle_cols = puzzle_cols       # num of rows, cols for puzzle
 
     def get_init_state(self):
         return self.init_state
