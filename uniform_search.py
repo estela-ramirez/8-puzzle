@@ -10,41 +10,45 @@ def contains(iterable, child):
             pass
     return False
 
-        
+
 def uniform_cost_search(problem):
     # intialize frontier using initial state of problem
     init_state = problem.get_init_state()
     root = Node(init_state)
     tr = Tree(root)
     
-    pq = []
-    pq.append(root)
+    frontier = []
+    frontier.append(root)
+    max_nodes_in_frontier = 1
 
     # intialized explored set/list to empty
     explored = []
     
-    count  = 0
     while True:
         # if frontier is empty, return failure
-        # if pq.empty() == True:
-        if len(pq) == 0:
+        # if frontier.empty() == True:
+        if len(frontier) == 0:
             return []
         else:
             # choose a leaf node and remove it from frontier
 
-            # print("printing frontier ...")
-            # print("nodes in frontier = ", len(pq))
-            # for node in pq:
-            #     print(node)
+            nodes_in_frontier = len(frontier)
+            if nodes_in_frontier > max_nodes_in_frontier:
+                max_nodes_in_frontier = nodes_in_frontier
+            else:
+                pass
 
-            curr_node = pq[0]
-            pq.pop(0)
-            
+            curr_node = frontier[0]
+            frontier.pop(0)
             
             # print("curr_node from frontier : ", curr_node.get_state() , " dir: " , curr_node.get_direction())
             # if the node contains a goal state, then return the corresponding solution
             if problem.is_goal_state(curr_node) == True:
-                return problem.get_solution_path(curr_node)
+                expanded_nodes = len(explored) 
+                sol_depth = curr_node.get_depth()
+                info = [expanded_nodes, max_nodes_in_frontier, sol_depth]
+
+                return (problem.get_solution_path(curr_node), info)
             else:
                 # add the node to the explored set
                 explored.append(curr_node)
@@ -57,16 +61,12 @@ def uniform_cost_search(problem):
                     # problem.print_state(child)
                     # print()
 
-                    in_frontier = contains(pq, child) 
+                    in_frontier = contains(frontier, child) 
                     in_explored = contains(explored, child)
                     # print(in_frontier , in_explored)
                     if  (in_frontier == False) and (in_explored == False):
-                        pq.append(child)
+                        frontier.append(child)
                         # print("added " + child.get_direction())
                     else:
                         pass
                         # print("NOT added " + child.get_direction())
-                # if count == 4:
-                #     return []
-
-        count+=1

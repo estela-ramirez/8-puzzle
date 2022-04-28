@@ -61,6 +61,7 @@ class Problem:
             child = Node(new_state)
             child.set_direction("left")
             child.set_parent(node)
+            child.set_depth(node.get_depth() + 1)
             # child.set_cost(node.get_cost() + child.get_cost())
             node.add_child(child)
         else:
@@ -79,6 +80,7 @@ class Problem:
             child = Node(new_state)
             child.set_direction("right")
             child.set_parent(node)
+            child.set_depth(node.get_depth() + 1)
             node.add_child(child)
         else:
             pass
@@ -96,6 +98,7 @@ class Problem:
             child = Node(new_state)
             child.set_direction("up")
             child.set_parent(node)
+            child.set_depth(node.get_depth() + 1)
             node.add_child(child)
         else:
             pass
@@ -116,6 +119,7 @@ class Problem:
             child = Node(new_state)
             child.set_direction("down")
             child.set_parent(node)
+            child.set_depth(node.get_depth() + 1)
             node.add_child(child)
         else:
             pass
@@ -129,7 +133,7 @@ class Problem:
         self.move_down(node, zero_index)
         
         
-    
+
     def get_solution_path(self, leaf_node):
         path = []
         path.append(leaf_node)

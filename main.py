@@ -62,18 +62,19 @@ def get_algo_choice():
     return choice
 
 def get_sol_from_algo(algo_choice, problem):
-    solution = []
+    path = []
+    info = []  
     print(algo_choice)
     if algo_choice == 1:
         print("chose UCS")
-        solution = uniform_cost_search(problem)
+        path, info = uniform_cost_search(problem)
     elif algo_choice == 2:
         print("chose Misplaced Tile")
-        solution = A_star_Misplaced_Tile(problem)
+        path, info = A_star_Misplaced_Tile(problem)
     else:
         print("chose Euc Dist")
-        solution = A_star_Euclidian_Dist(problem)
-    return solution
+        path, info = A_star_Euclidian_Dist(problem)
+    return (path, info)
 
 if __name__ == "__main__":
     puzzle_cols = 3
@@ -91,11 +92,14 @@ if __name__ == "__main__":
     # problem4 = Problem(puzzle_cols, [1, 0, 3, 4, 2, 6, 7, 5, 8])
 
     algo_choice = get_algo_choice()
-    solution = get_sol_from_algo(algo_choice, problem)
+    path, info = get_sol_from_algo(algo_choice, problem)
 
-    if  solution == []:
+    if  path == []:
         print("No path")
     else:
-        problem.print_solution_path(solution)
-        print("Done!!!")
-   
+        problem.print_solution_path(path)
+        print("Goal!!!\n")
+
+        print("To solve this problem the algorithm expanded a total of {0} nodes.".format(info[0]))
+        print("The maximum number of nodes in the queue at any one time: {0}".format(info[1]))
+        print("the depth of the goal node was {0}\n".format(info[2]))

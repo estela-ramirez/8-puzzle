@@ -10,6 +10,7 @@ class Node:
         self.parent = None
         self.children = []
         self.cost = 1
+        self.depth = 0
         self.direction = None 
 
     # make node a comparable object 
@@ -50,6 +51,12 @@ class Node:
     def get_cost(self):
         return self.cost
 
+    def get_depth(self):
+        return self.depth
+
+    def set_depth(self, depth):
+        self.depth = depth
+        
     def add_child(self, child):
         # add pointer to parent
         self.children.append(child)
