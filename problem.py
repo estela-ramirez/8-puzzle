@@ -6,6 +6,7 @@ class Problem:
         self.goal_state = goal_state
         # operators for the blank space (0), if there is a number in that direction
         self.puzzle_cols = puzzle_cols       # num of rows, cols for puzzle
+        self.search_tree = None
 
     def get_init_state(self):
         return self.init_state
@@ -13,9 +14,11 @@ class Problem:
     def get_goal_state(self):
         return self.goal_state
 
-    def get_operators(self):
-        return self.operators
+    def get_search_tree(self):
+        return self.search_tree
 
+    def set_search_tree(self, st):
+        self.search_tree = st
 
     # if Node's state matches Problem's goal state, returns True, False otherwise
     def is_goal_state(self, node):
@@ -48,6 +51,36 @@ class Problem:
         return 0
 
 
+    def get_misplaced_tile_gn(self, node, root):
+        gn = 0
+        gn += node.get_path_cost()
+
+        while (node.get_parent() != None):
+            node = node.get_parent()
+            gn += node.get_path_cost()
+        return gn
+
+    # return the number of misplaced tiles in node 
+    def get_misplaced_tile_hn(self, node):
+        fn = 0
+        node_state = node.get_state()
+        for num in self.goal_state:
+            if self.goal_state[num] == 0:
+                pass
+            else:
+                if self.goal_state[num] != node_state[num]:
+                    fn += 1
+                else:
+                    pass
+        return fn
+
+    def get_misplaced_tile_fn(self, node, root):
+        gn = self.get_misplaced_tile_gn(node, root)
+        hn = self.get_misplaced_tile_hn(node)
+        print(" ******* gn = ", gn, "hn = ", hn)
+        return gn + hn 
+
+
     def move_left(self, node, zero_index):
         if zero_index % self.puzzle_cols  > 0:
 
@@ -62,7 +95,14 @@ class Problem:
             child.set_direction("left")
             child.set_parent(node)
             child.set_depth(node.get_depth() + 1)
-            # child.set_cost(node.get_cost() + child.get_cost())
+
+            #child.set_cost(child.get_path_cost() + node.get_path_cost())
+            print("parent = ", node.get_state())
+            print("child = ", child.get_state())
+
+            st_root = self.search_tree.get_root()
+            fn = self.get_misplaced_tile_fn(child, st_root)
+            child.set_heuristic_cost(fn)
             node.add_child(child)
         else:
             pass
@@ -81,6 +121,10 @@ class Problem:
             child.set_direction("right")
             child.set_parent(node)
             child.set_depth(node.get_depth() + 1)
+
+            st_root = self.search_tree.get_root()
+            fn = self.get_misplaced_tile_fn(child, st_root)
+            child.set_heuristic_cost(fn)
             node.add_child(child)
         else:
             pass
@@ -99,6 +143,10 @@ class Problem:
             child.set_direction("up")
             child.set_parent(node)
             child.set_depth(node.get_depth() + 1)
+            
+            st_root = self.search_tree.get_root()
+            fn = self.get_misplaced_tile_fn(child, st_root)
+            child.set_heuristic_cost(fn)
             node.add_child(child)
         else:
             pass
@@ -120,6 +168,10 @@ class Problem:
             child.set_direction("down")
             child.set_parent(node)
             child.set_depth(node.get_depth() + 1)
+        
+            st_root = self.search_tree.get_root()
+            fn = self.get_misplaced_tile_fn(child, st_root)
+            child.set_heuristic_cost(fn)
             node.add_child(child)
         else:
             pass
@@ -152,3 +204,6 @@ class Problem:
                 print("Move: " + dir + "...")
             self.print_state(node)
             print()
+
+
+    

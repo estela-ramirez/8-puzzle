@@ -9,7 +9,10 @@ class Node:
         self.state = state  # state of puzzle 
         self.parent = None
         self.children = []
-        self.cost = 1
+        # cost is == g(n) with UCS, cost
+        # cost is f(n) = g(n) + h(n) for A star
+        self.path_cost = 1
+        self.heuristic_cost = 0   
         self.depth = 0
         self.direction = None 
 
@@ -48,19 +51,25 @@ class Node:
     def set_parent(self, parent):
         self.parent = parent
 
-    def get_cost(self):
-        return self.cost
+    def get_path_cost(self):
+        return self.path_cost
+
+    def set_path_cost(self, pc):
+        self.path_cost = pc
+
+    def get_heuristic_cost(self):
+        return self.heuristic_cost
+
+    def set_heuristic_cost(self, hc):
+        self.heuristic_cost = hc
 
     def get_depth(self):
         return self.depth
 
     def set_depth(self, depth):
         self.depth = depth
-        
+
     def add_child(self, child):
         # add pointer to parent
         self.children.append(child)
         # update child's cost
-
-    def set_cost(self, cost):
-        self.cost = cost
