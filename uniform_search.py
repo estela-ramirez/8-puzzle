@@ -72,6 +72,7 @@ def uniform_cost_search(problem):
 
                     st_root = search_tree.get_root()
                     gn = calculate_gn(child, st_root)
+                    child.set_gn(gn)
                     child.set_heuristic_cost(gn)
 
                     in_frontier = contains(frontier, child) 
