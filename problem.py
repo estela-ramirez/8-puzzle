@@ -111,10 +111,24 @@ class Problem:
             print(node.get_state()[i], end = " ")
         print()
 
+    def print_node_info(self, node):
+        if node.get_direction() != None:
+            if node.get_hn() != -1:
+                print("The best state to expand with g(n) =", node.get_gn() , " and  h(n) =", node.get_hn())
+            else:
+                print("The best state to expand with g(n) =", node.get_gn())
+
+            print("Move: " + node.get_direction() + "...")
+        else:
+            print("Expanding state")
+        self.print_state(node)
+
     def print_solution_path(self, solution):
         for node in solution[::-1]:
             dir = node.get_direction()
             if dir != None:
                 print("Move: " + dir + "...")
+            else:
+                pass
             self.print_state(node)
             print()

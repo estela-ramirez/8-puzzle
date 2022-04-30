@@ -5,6 +5,8 @@ from A_star_Mispl_Tile import A_star_Misplaced_Tile
 from A_star_Eucl_dist import A_star_Euclidian_Dist
 from A_star import A_star
 
+# asks user for puzzle option 
+# return (1) default, (2) their own
 def get_puzzle_option():
     puzzle_option = input()
     
@@ -19,6 +21,8 @@ def get_puzzle_option():
             puzzle_option = input("Enter \"1\" or \"2\": ")
     return puzzle_option
 
+# if the user entered option (2), ask them for their puzzle layout
+# return puzzle initial state, []
 def get_user_puzzle(puzzle_option):
     # could add more error checking
     def_puzzle = [1, 2, 3, 4, 5, 6, 7, 0, 8]
@@ -42,6 +46,10 @@ def get_user_puzzle(puzzle_option):
         pass
     return def_puzzle
 
+#return algo choice, int 
+# (1) UCS
+# (2) A* with misplaced tile heuristic
+# (3) A* with Eudlidian distance heuristic
 def get_algo_choice():
     print("Enter your choice of algorithm")
     print("(1) Uniform Cost Search")
@@ -62,19 +70,20 @@ def get_algo_choice():
 
     return choice
 
+
 def get_sol_from_algo(algo_choice, problem):
     path = []
-    info = []  
-    print(algo_choice)
+    info = [0, 0, 0]  
     if algo_choice == 1:
-        print("chose UCS")
         path, info = uniform_cost_search(problem)
     elif algo_choice == 2:
-        print("chose Misplaced Tile")
-        path, info = A_star_Misplaced_Tile(problem)
+         A_star_MT = A_star(problem, 2)
+         path = A_star_MT.solve_problem() 
+         info = [A_star_MT.get_num_exanded_nodes(), A_star_MT.get_max_nodes_in_frontier(), A_star_MT.get_sol_depth()]
     else:
-        print("chose Euc Dist")
-        path, info = A_star_Euclidian_Dist(problem)
+        A_star_ED = A_star(problem, 3)
+        path = A_star_ED.solve_problem() 
+        info = [A_star_ED.get_num_exanded_nodes(), A_star_ED.get_max_nodes_in_frontier(), A_star_ED.get_sol_depth()]
     return (path, info)
 
 if __name__ == "__main__":
@@ -86,33 +95,30 @@ if __name__ == "__main__":
     puzzle = get_user_puzzle(puzzle_option)
     problem = Problem(puzzle_cols, puzzle)
 
-    # problem5 = Problem(puzzle_cols, [1, 2, 3, 4, 5, 6, 7, 8, 0])
-    # problem1 = Problem(puzzle_cols, [1, 2, 3, 4, 5, 6, 7, 0, 8])  
+    problem5 = Problem(puzzle_cols, [1, 2, 3, 4, 5, 6, 7, 8, 0])
+    problem1 = Problem(puzzle_cols, [1, 2, 3, 4, 5, 6, 7, 0, 8])  
     problem2 = Problem(puzzle_cols, [1, 2, 3, 4, 5, 0, 7, 8, 6])  
     problem3 = Problem(puzzle_cols, [1, 2, 3, 4, 8, 0, 7, 6, 5])
     problem4 = Problem(puzzle_cols, [1, 0, 3, 4, 2, 6, 7, 5, 8])
 
     algo_choice = get_algo_choice()
-    # path, info = get_sol_from_algo(algo_choice, problem4)
-    A_star_tile = A_star(problem4, 1)
-    path = A_star_tile.solve_problem()
+    path, info = get_sol_from_algo(algo_choice, problem4)
+    
+    # testing 
+    # A_star_euclid = A_star(problem1, 2)
+    # path = A_star_euclid.solve_problem()
+    # info = [A_star_euclid.get_num_exanded_nodes(), A_star_euclid.get_max_nodes_in_frontier(), A_star_euclid.get_sol_depth()]
+    # testing
 
-
-    num_expanded_nodes = A_star_tile.get_num_exanded_nodes()
-    max_num_nodes = A_star_tile.get_max_nodes_in_frontier()
-    sol_depth = A_star_tile.get_sol_depth()
-
-    # path, info = uniform_cost_search(problem4)
-    # num_expanded_nodes = info[0]
-    # max_num_nodes = info[1]
-    # sol_depth = info[2]
+    print("\nTo solve this problem the algorithm expanded a total of {0} nodes.".format(info[0]))
+    print("The maximum number of nodes in the queue at any one time: {0}".format(info[1]))
+    print("the depth of the goal node was {0}\n".format(info[2]))
 
     if  path == []:
         print("No path")
     else:
+        print("Printing solution path ... ")
         problem.print_solution_path(path) 
         print("Goal!!!\n")
 
-        print("To solve this problem the algorithm expanded a total of {0} nodes.".format(num_expanded_nodes))
-        print("The maximum number of nodes in the queue at any one time: {0}".format(max_num_nodes))
-        print("the depth of the goal node was {0}\n".format(sol_depth))
+
