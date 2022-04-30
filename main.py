@@ -3,6 +3,7 @@ from problem import Problem
 from uniform_search import uniform_cost_search
 from A_star_Mispl_Tile import A_star_Misplaced_Tile
 from A_star_Eucl_dist import A_star_Euclidian_Dist
+from A_star import A_star
 
 def get_puzzle_option():
     puzzle_option = input()
@@ -87,19 +88,31 @@ if __name__ == "__main__":
 
     # problem5 = Problem(puzzle_cols, [1, 2, 3, 4, 5, 6, 7, 8, 0])
     # problem1 = Problem(puzzle_cols, [1, 2, 3, 4, 5, 6, 7, 0, 8])  
-    # problem2 = Problem(puzzle_cols, [1, 2, 3, 4, 5, 0, 7, 8, 6])  
-    # problem3 = Problem(puzzle_cols, [1, 2, 3, 4, 8, 0, 7, 6, 5])
-    # problem4 = Problem(puzzle_cols, [1, 0, 3, 4, 2, 6, 7, 5, 8])
+    problem2 = Problem(puzzle_cols, [1, 2, 3, 4, 5, 0, 7, 8, 6])  
+    problem3 = Problem(puzzle_cols, [1, 2, 3, 4, 8, 0, 7, 6, 5])
+    problem4 = Problem(puzzle_cols, [1, 0, 3, 4, 2, 6, 7, 5, 8])
 
     algo_choice = get_algo_choice()
-    path, info = get_sol_from_algo(algo_choice, problem)
+    # path, info = get_sol_from_algo(algo_choice, problem4)
+    A_star_tile = A_star(problem4, 1)
+    path = A_star_tile.solve_problem()
+
+
+    num_expanded_nodes = A_star_tile.get_num_exanded_nodes()
+    max_num_nodes = A_star_tile.get_max_nodes_in_frontier()
+    sol_depth = A_star_tile.get_sol_depth()
+
+    # path, info = uniform_cost_search(problem4)
+    # num_expanded_nodes = info[0]
+    # max_num_nodes = info[1]
+    # sol_depth = info[2]
 
     if  path == []:
         print("No path")
     else:
-        problem.print_solution_path(path)
+        problem.print_solution_path(path) 
         print("Goal!!!\n")
 
-        print("To solve this problem the algorithm expanded a total of {0} nodes.".format(info[0]))
-        print("The maximum number of nodes in the queue at any one time: {0}".format(info[1]))
-        print("the depth of the goal node was {0}\n".format(info[2]))
+        print("To solve this problem the algorithm expanded a total of {0} nodes.".format(num_expanded_nodes))
+        print("The maximum number of nodes in the queue at any one time: {0}".format(max_num_nodes))
+        print("the depth of the goal node was {0}\n".format(sol_depth))

@@ -30,14 +30,11 @@ class Node:
     def __repr__(self):
         return repr(self.state)
 
-
-#### for testing   
     def get_direction(self):
         return self.direction
 
     def set_direction(self, dir):
-        self.direction = dir
-#### for testing  
+        self.direction = dir 
 
     def get_state(self):
         return self.state.copy()
@@ -69,7 +66,21 @@ class Node:
     def set_depth(self, depth):
         self.depth = depth
 
+    def is_leaf_node(self):
+        if len(self.get_children()) == 0:
+            return True
+        return False
+        
+    # if Node's state matches Problem's goal state, returns True, False otherwise
+    def is_goal_state(self, goal_state):
+        if goal_state == self.get_state():
+            return True
+        return False
+    
     def add_child(self, child):
-        # add pointer to parent
+        child.set_parent(self)
         self.children.append(child)
-        # update child's cost
+        child.set_depth(self.get_depth() + 1)
+
+    
+            

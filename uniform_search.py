@@ -10,12 +10,20 @@ def contains(iterable, child):
             pass
     return False
 
+def calculate_gn(node, root):
+    gn = 0
+    gn += node.get_path_cost()
+
+    while (node.get_parent() != None):
+        node = node.get_parent()
+        gn += node.get_path_cost()
+    return gn
 
 def uniform_cost_search(problem):
     # intialize frontier using initial state of problem
     init_state = problem.get_init_state()
     root = Node(init_state)
-    tr = Tree(root)
+    search_tree = Tree(root)
     
     frontier = []
     frontier.append(root)
@@ -43,12 +51,13 @@ def uniform_cost_search(problem):
             
             # print("curr_node from frontier : ", curr_node.get_state() , " dir: " , curr_node.get_direction())
             # if the node contains a goal state, then return the corresponding solution
-            if problem.is_goal_state(curr_node) == True:
+            goal_state = problem.get_goal_state()
+            if curr_node.is_goal_state(goal_state) == True:
                 expanded_nodes = len(explored) 
                 sol_depth = curr_node.get_depth()
                 info = [expanded_nodes, max_nodes_in_frontier, sol_depth]
 
-                return (problem.get_solution_path(curr_node), info)
+                return (search_tree.get_solution_path(curr_node), info)
             else:
                 # add the node to the explored set
                 explored.append(curr_node)
@@ -60,6 +69,10 @@ def uniform_cost_search(problem):
                     # print(child.get_direction())
                     # problem.print_state(child)
                     # print()
+
+                    st_root = search_tree.get_root()
+                    gn = calculate_gn(child, st_root)
+                    child.set_heuristic_cost(gn)
 
                     in_frontier = contains(frontier, child) 
                     in_explored = contains(explored, child)

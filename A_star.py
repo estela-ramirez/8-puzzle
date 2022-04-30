@@ -12,7 +12,6 @@ class A_star:
         self._frontier = []
         self._explored = []
 
-        self.num_expanded_nodes = 0
         self.max_nodes_in_frontier = 1
         self.sol_depth = 0
 
@@ -27,7 +26,7 @@ class A_star:
         # calculate heuristic in a star algo not in node ...
 
     def get_num_exanded_nodes(self):
-        return self.num_expanded_nodes
+        return len(self._explored)
 
     def get_max_nodes_in_frontier(self):
         return self.max_nodes_in_frontier
@@ -40,7 +39,7 @@ class A_star:
         root = Node(init_state)
         root.set_path_cost(0)
         self._search_tree = Tree(root)
-        self.problem.set_search_tree(self._search_tree)  ## change this, so A star finds this 
+    
         self._frontier.append(root)
 
     def _contains(self, iterable, child):
@@ -51,21 +50,54 @@ class A_star:
                 pass
         return False
 
+    def _update_max_nodes_in_frontier(self):
+        nodes_in_frontier = len(self._frontier)
+        if nodes_in_frontier > self.max_nodes_in_frontier:
+            self.max_nodes_in_frontier = nodes_in_frontier
+        else:
+            pass
+
+    def get_gn(self, node, root):
+        gn = 0
+        gn += node.get_path_cost()
+
+        while (node.get_parent() != None):
+            node = node.get_parent()
+            gn += node.get_path_cost()
+        return gn
+
+    # return the number of misplaced tiles in node 
+    def get_misplaced_tile_hn(self, node):
+        fn = 0
+        node_state = node.get_state()
+        prob_goal_state = self.problem.get_goal_state()
+        for num in prob_goal_state:
+            if prob_goal_state[num] == 0:
+                pass
+            else:
+                if prob_goal_state[num] != node_state[num]:
+                    fn += 1
+                else:
+                    pass
+        return fn
+
+    def get_misplaced_tile_fn(self, node, root):
+        gn = self.get_gn(node, root)
+        hn = self.get_misplaced_tile_hn(node)
+        print(" ******* gn = ", gn, "hn = ", hn)
+        return gn + hn 
+
+
     def solve_problem(self):
         self._init_frontier()
         while True:
             # if frontier is empty, return failure
             # if frontier.empty() == True:
             if len(self._frontier) == 0:
-                print("here")
                 return []
             else:
                 # choose a leaf node and remove it from frontier
-                nodes_in_frontier = len(self._frontier)
-                if nodes_in_frontier > self.max_nodes_in_frontier:
-                    self.max_nodes_in_frontier = nodes_in_frontier
-                else:
-                    pass
+                self._update_max_nodes_in_frontier()
                 
                 # print nodes in frontier
                 for node in self._frontier:
@@ -77,35 +109,32 @@ class A_star:
                 
                 print("curr_node from frontier : ", curr_node.get_state() , " dir: " , curr_node.get_direction())
                 # if the node contains a goal state, then return the corresponding solution
-                
-                if self.problem.is_goal_state(curr_node) == True:
+                goal_state = self.problem.get_goal_state()
+                if curr_node.is_goal_state(goal_state) == True:
                     self.expanded_nodes = len(self._explored) 
                     self.sol_depth = curr_node.get_depth()
-                    info = [self.expanded_nodes, self.max_nodes_in_frontier, self.sol_depth]
-
-                    return self.problem.get_solution_path(curr_node)
+                    return self._search_tree.get_solution_path(curr_node)
                 else:
                     # add the node to the explored set
                     self._explored.append(curr_node)
-                    # expand the chosen node, adding the resulting nodes to the frontier
-                    #     only if not in the frontier or explored set 
+                    # expand the chosen node
                     self.problem.expand_node(curr_node)
-
+                    #  add the resulting nodes to the frontier
+                    #     only if not in the frontier or explored set 
                     for child in curr_node.get_children():
-                        # print(child.get_direction())
-                        # problem.print_state(child)
-                        # print()
+
+                        #!!!!! 
+                        st_root = self._search_tree.get_root()
+                        fn = self.get_misplaced_tile_fn(child, st_root)
+                        child.set_heuristic_cost(fn)
 
                         in_frontier = self._contains(self._frontier, child) 
                         in_explored = self._contains(self._explored, child)
-                        # print(in_frontier , in_explored)
                         if  (in_frontier == False) and (in_explored == False):
+
+
                             self._frontier.append(child)
-                            # print("added " + child.get_direction())
                         else:
                             pass
-                            # print("NOT added " + child.get_direction())
-
                     # sort nodes in frontier by cost value 
                     self._frontier.sort(key=lambda x:x.get_heuristic_cost())
-
