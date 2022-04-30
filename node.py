@@ -9,10 +9,12 @@ class Node:
         self.state = state  # state of puzzle 
         self.parent = None
         self.children = []
-        # cost is == g(n) with UCS, cost
-        # cost is f(n) = g(n) + h(n) for A star
         self.path_cost = 1
-        self.heuristic_cost = 0   
+        # heuristic_cost is == g(n) with UCS, cost
+        # heuristic_cost is f(n) = g(n) + h(n) for A star
+        self.heuristic_cost = 0  
+        self.gn = 0
+        self.hn = -1 
         self.depth = 0
         self.direction = None 
 
@@ -30,11 +32,9 @@ class Node:
     def __repr__(self):
         return repr(self.state)
 
+    # getter methods
     def get_direction(self):
         return self.direction
-
-    def set_direction(self, dir):
-        self.direction = dir 
 
     def get_state(self):
         return self.state.copy()
@@ -45,27 +45,44 @@ class Node:
     def get_children(self):
         return self.children.copy()
 
-    def set_parent(self, parent):
-        self.parent = parent
-
     def get_path_cost(self):
         return self.path_cost
+
+    def get_gn(self):
+        return self.gn
+    
+    def get_hn(self):
+        return self.hn
+
+    def get_heuristic_cost(self):
+        return self.heuristic_cost
+        
+    def get_depth(self):
+        return self.depth
+
+    # setter methods 
+    def set_direction(self, dir):
+        self.direction = dir 
+
+    def set_parent(self, parent):
+        self.parent = parent
 
     def set_path_cost(self, pc):
         self.path_cost = pc
 
-    def get_heuristic_cost(self):
-        return self.heuristic_cost
+    def set_gn(self, gn):
+        self.gn = gn 
+
+    def set_hn(self, hn):
+        self.hn = hn
 
     def set_heuristic_cost(self, hc):
         self.heuristic_cost = hc
 
-    def get_depth(self):
-        return self.depth
-
     def set_depth(self, depth):
         self.depth = depth
 
+    # helper methods
     def is_leaf_node(self):
         if len(self.get_children()) == 0:
             return True
@@ -77,6 +94,8 @@ class Node:
             return True
         return False
     
+    # set pointer to parent, add child in parent's list of children
+    # set child depth's to +1 that of the parent's
     def add_child(self, child):
         child.set_parent(self)
         self.children.append(child)
