@@ -4,10 +4,10 @@ from node import Node
 
 
 class A_star:
-    def __init__(self, problem, h):
+    def __init__(self, problem, hc):
         self.problem = problem
-        # 1 will be misplaced tile, # 2 will be euclidian dist
-        self.heuristic = h  
+        # 2 will be misplaced tile, # 3 will be euclidian dist
+        self.heuristic_choice = hc  
         self._search_tree = None
         self._frontier = []
         self._explored = []
@@ -16,14 +16,8 @@ class A_star:
         self.sol_depth = 0
 
 
-    def get_heuristic(self):
-        return self.heuristic
-
-    def set_heuristic(self, h):
-        self.heuristic = h
-        # if 1--> tiles
-        # if 2 --> dist 
-        # calculate heuristic in a star algo not in node ...
+    def get_heuristic_choice(self):
+        return self.heuristic_choice
 
     def get_num_exanded_nodes(self):
         return len(self._explored)
@@ -57,7 +51,10 @@ class A_star:
         else:
             pass
 
-    def get_gn(self, node, root):
+    # g(n) for this is really just the depth of the node
+    # but it's the cost of each node going up until you reach the root
+    # starting from the passed in node
+    def calculate_gn(self, node, root):
         gn = 0
         gn += node.get_path_cost()
 
@@ -67,8 +64,8 @@ class A_star:
         return gn
 
     # return the number of misplaced tiles in node 
-    def get_misplaced_tile_hn(self, node):
-        fn = 0
+    def calculate_misplaced_tile_hn(self, node):
+        hn = 0
         node_state = node.get_state()
         prob_goal_state = self.problem.get_goal_state()
         for num in prob_goal_state:
@@ -76,17 +73,34 @@ class A_star:
                 pass
             else:
                 if prob_goal_state[num] != node_state[num]:
-                    fn += 1
+                    hn += 1
                 else:
                     pass
-        return fn
+        return hn
 
-    def get_misplaced_tile_fn(self, node, root):
-        gn = self.get_gn(node, root)
-        hn = self.get_misplaced_tile_hn(node)
-        print(" ******* gn = ", gn, "hn = ", hn)
-        return gn + hn 
+    def calculate_euclid_dist_hn(self, node):
+        hn = 0
+        
+        return hn
 
+    def get_fn(self, node, root):
+        gn = self.calculate_gn(node, root)
+        node.set_gn(gn)
+        hn = -1   
+        if self.heuristic_choice == 2:
+            hn = self.calculate_misplaced_tile_hn(node)
+        else:
+            hn = self.calculate_euclid_dist_hn(node)
+        
+        node.set_hn(hn)
+        print("choice = ", self.heuristic_choice, " ******* gn = ", node.get_gn(), "hn = ", node.get_hn())
+        return node.get_gn() + node.get_hn() 
+
+    # set node's heuristic value (fn) = g(n) + h(n)
+    def set_heuristic(self, node):
+        st_root = self._search_tree.get_root()
+        fn = self.get_fn(node, st_root)
+        node.set_heuristic_cost(fn)
 
     def solve_problem(self):
         self._init_frontier()
@@ -99,6 +113,8 @@ class A_star:
                 # choose a leaf node and remove it from frontier
                 self._update_max_nodes_in_frontier()
                 
+                if len(self._explored) > 2400:
+                    return []
                 # print nodes in frontier
                 for node in self._frontier:
                     if node.get_parent() != None:
@@ -106,8 +122,10 @@ class A_star:
 
                 curr_node = self._frontier[0]
                 self._frontier.pop(0)
+
+                self.problem.print_node_info(curr_node)
                 
-                print("curr_node from frontier : ", curr_node.get_state() , " dir: " , curr_node.get_direction())
+                #print("curr_node from frontier : ", curr_node.get_state() , " dir: " , curr_node.get_direction())
                 # if the node contains a goal state, then return the corresponding solution
                 goal_state = self.problem.get_goal_state()
                 if curr_node.is_goal_state(goal_state) == True:
@@ -123,10 +141,8 @@ class A_star:
                     #     only if not in the frontier or explored set 
                     for child in curr_node.get_children():
 
-                        #!!!!! 
-                        st_root = self._search_tree.get_root()
-                        fn = self.get_misplaced_tile_fn(child, st_root)
-                        child.set_heuristic_cost(fn)
+                        self.set_heuristic(child)
+                        
 
                         in_frontier = self._contains(self._frontier, child) 
                         in_explored = self._contains(self._explored, child)
