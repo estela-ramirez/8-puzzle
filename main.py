@@ -100,9 +100,11 @@ if __name__ == "__main__":
     problem2 = Problem(puzzle_cols, [1, 2, 3, 4, 5, 0, 7, 8, 6])  
     problem3 = Problem(puzzle_cols, [1, 2, 3, 4, 8, 0, 7, 6, 5])
     problem4 = Problem(puzzle_cols, [1, 0, 3, 4, 2, 6, 7, 5, 8])
+    problem9 = Problem(puzzle_cols, [1, 2, 4, 3, 5, 6, 7, 8, 0])
 
+    problem99 = Problem(puzzle_cols, [8, 7, 1, 6, 0, 2, 5, 4, 3])
     algo_choice = get_algo_choice()
-    path, info = get_sol_from_algo(algo_choice, problem4)
+    path, info = get_sol_from_algo(algo_choice, problem9)
     
     # testing 
     # A_star_euclid = A_star(problem1, 2)
@@ -110,15 +112,16 @@ if __name__ == "__main__":
     # info = [A_star_euclid.get_num_exanded_nodes(), A_star_euclid.get_max_nodes_in_frontier(), A_star_euclid.get_sol_depth()]
     # testing
 
-    print("\nTo solve this problem the algorithm expanded a total of {0} nodes.".format(info[0]))
-    print("The maximum number of nodes in the queue at any one time: {0}".format(info[1]))
-    print("the depth of the goal node was {0}\n".format(info[2]))
-
     if  path == []:
         print("No path")
     else:
+        print("\nGoal!!!\n")
+        print("\nTo solve this problem the algorithm expanded a total of {0} nodes.".format(info[0]))
+        print("The maximum number of nodes in the queue at any one time: {0}".format(info[1]))
+        print("the depthclear of the goal node was {0}\n".format(info[2]))
+        
         print("Printing solution path ... ")
         problem.print_solution_path(path) 
-        print("Goal!!!\n")
+        
 
 

@@ -37,8 +37,6 @@ class Problem:
 
             child = Node(new_state)
             child.set_direction("left")
-            print("parent = ", node.get_state())
-            print("child = ", child.get_state())
             node.add_child(child)
         else:
             pass
@@ -114,9 +112,9 @@ class Problem:
     def print_node_info(self, node):
         if node.get_direction() != None:
             if node.get_hn() != -1:
-                print("The best state to expand with g(n) =", node.get_gn() , " and  h(n) =", node.get_hn())
+                print("\nThe best state to expand with g(n) =", node.get_gn() , " and  h(n) =", node.get_hn())
             else:
-                print("The best state to expand with g(n) =", node.get_gn())
+                print("\nThe best state to expand with g(n) =", node.get_gn())
 
             print("Move: " + node.get_direction() + "...")
         else:
