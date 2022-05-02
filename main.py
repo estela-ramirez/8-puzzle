@@ -95,16 +95,15 @@ if __name__ == "__main__":
     puzzle = get_user_puzzle(puzzle_option)
     problem = Problem(puzzle_cols, puzzle)
 
-    problem5 = Problem(puzzle_cols, [1, 2, 3, 4, 5, 6, 7, 8, 0])
-    problem1 = Problem(puzzle_cols, [1, 2, 3, 4, 5, 6, 7, 0, 8])  
-    problem2 = Problem(puzzle_cols, [1, 2, 3, 4, 5, 0, 7, 8, 6])  
-    problem3 = Problem(puzzle_cols, [1, 2, 3, 4, 8, 0, 7, 6, 5])
-    problem4 = Problem(puzzle_cols, [1, 0, 3, 4, 2, 6, 7, 5, 8])
-    problem9 = Problem(puzzle_cols, [1, 2, 4, 3, 5, 6, 7, 8, 0])
+    # problem1 = Problem(puzzle_cols, [1, 2, 3, 4, 5, 6, 7, 8, 0])
+    # problem2 = Problem(puzzle_cols, [1, 2, 3, 4, 5, 6, 7, 0, 8])
+    # problem3 = Problem(puzzle_cols, [1, 2, 0, 4, 5, 3, 7, 8, 6])  
+    # problem4 = Problem(puzzle_cols, [0, 1, 2, 4, 5, 3, 7, 8, 6])
+    # problem5 = Problem(puzzle_cols, [8, 7, 1, 6, 0, 2, 5, 4, 3])  
+    # problem6 = Problem(puzzle_cols, [1, 2, 3, 4, 5, 6, 8, 7, 0])
 
-    problem99 = Problem(puzzle_cols, [8, 7, 1, 6, 0, 2, 5, 4, 3])
     algo_choice = get_algo_choice()
-    path, info = get_sol_from_algo(algo_choice, problem9)
+    path, info = get_sol_from_algo(algo_choice, problem)
     
     # testing 
     # A_star_euclid = A_star(problem1, 2)
@@ -118,7 +117,7 @@ if __name__ == "__main__":
         print("\nGoal!!!\n")
         print("\nTo solve this problem the algorithm expanded a total of {0} nodes.".format(info[0]))
         print("The maximum number of nodes in the queue at any one time: {0}".format(info[1]))
-        print("the depthclear of the goal node was {0}\n".format(info[2]))
+        print("the depth of the goal node was {0}\n".format(info[2]))
         
         print("Printing solution path ... ")
         problem.print_solution_path(path) 
