@@ -9,9 +9,11 @@
 <!-- About the Project -->
 ## :star2: About the Project
 <p>This program solves the 8 puzzle using </p>
-<li>1. Uniform Cost Search</li>
-<li>2. A* with the Misplaced Tile heuristic</li>
-<li>3. A* with the Euclidean Distance heuristic</li>
+<ol>
+    <li>Uniform Cost Search</li>
+    <li>A* with the Misplaced Tile heuristic</li>
+    <li>A* with the Euclidean Distance heuristic</li>
+</ol>
 
 It shows the steps the algorithm takes to find a solution.
 Once the solution is found, the olution path is printed. 
@@ -21,7 +23,7 @@ You can use the default puzzle or input your own
 Default puzzle:
 
 ```bash
-[1 2  3 
+[1 2 3 
  4 5 6
  7 0 8]
 ```
@@ -30,9 +32,11 @@ Default puzzle:
 ### :detective: Search Trace
 If you enter the puzzle 
 
-[1 2  3 
+```bash
+[1 2 3 
  4 8 0
  7 6 5]
+```
 
 and select A* with Eudlidian Distance Heursitic
 
