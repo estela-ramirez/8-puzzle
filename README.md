@@ -16,7 +16,7 @@
 </ol>
 
 It shows the steps the algorithm takes to find a solution.
-Once the solution is found, the olution path is printed. 
+Once the solution is found, the solution path is printed. 
 
 You can use the default puzzle or input your own
 
