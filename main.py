@@ -1,8 +1,6 @@
 from multiprocessing.sharedctypes import Value
 from problem import Problem
 from uniform_search import uniform_cost_search
-from A_star_Mispl_Tile import A_star_Misplaced_Tile
-from A_star_Eucl_dist import A_star_Euclidian_Dist
 from A_star import A_star
 
 # asks user for puzzle option 
