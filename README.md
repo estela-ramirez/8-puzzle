@@ -1,7 +1,7 @@
 <!-- Table of Contents -->
 # Table of Contents
 - [About the Project](#star2-about-the-project)
-  * [Search Trace](#detective-search-trace)
+  * [Search Trace Example](#detective-search-trace-example)
   * [Tech Stack](#space_invader-tech-stack)
   * [Run Locally](#running_woman-run-locally)
 
@@ -28,8 +28,8 @@ Default puzzle:
  7 0 8]
 ```
 
-<!-- Search Trace -->
-### :detective: Search Trace
+<!-- Search Trace Example -->
+### :detective: Search Trace Example
 If you enter the puzzle 
 
 ```bash
